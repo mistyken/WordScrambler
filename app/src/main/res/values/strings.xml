@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WordScrambler</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_scramble">Scramble</string>
+    <string name="button_copy">Copy</string>
+    <string name="button_clear">Clear</string>
+</resources>
