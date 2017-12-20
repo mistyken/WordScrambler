@@ -4,4 +4,5 @@
     <string name="button_scramble">Scramble</string>
     <string name="button_copy">Copy</string>
     <string name="button_clear">Clear</string>
+    <string name="top_message">Scramble a message by randomizing the letters btw first and last. HAVE FUN!</string>
 </resources>
