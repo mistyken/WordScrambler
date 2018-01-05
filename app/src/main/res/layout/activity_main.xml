@@ -10,46 +10,46 @@
         android:id="@+id/scrambleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginStart="48dp"
         android:onClick="scrambleMessage"
         android:text="@string/button_scramble"
-        app:layout_constraintBaseline_toBaselineOf="@+id/copyButton"
+        app:layout_constraintBottom_toTopOf="@+id/clearButton"
         app:layout_constraintEnd_toStartOf="@+id/copyButton"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/copyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="60dp"
         android:onClick="copyMessage"
         android:text="@string/button_copy"
-        app:layout_constraintBaseline_toBaselineOf="@+id/clearButton"
-        app:layout_constraintEnd_toStartOf="@+id/clearButton"
+        app:layout_constraintBottom_toTopOf="@+id/sendButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/scrambleButton" />
 
     <Button
         android:id="@+id/clearButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="62dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="96dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginStart="48dp"
         android:onClick="clearMessage"
         android:text="@string/button_clear"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.571"
-        app:layout_constraintStart_toEndOf="@+id/copyButton" />
+        app:layout_constraintEnd_toStartOf="@+id/sendButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/textMessage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="18dp"
@@ -69,7 +69,7 @@
         android:layout_marginBottom="18dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:text="@string/top_message"
         android:textAlignment="center"
         android:textColor="@android:color/darker_gray"
@@ -79,4 +79,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="60dp"
+        android:onClick="sendMessage"
+        android:text="@string/button_send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/clearButton" />
 </android.support.constraint.ConstraintLayout>

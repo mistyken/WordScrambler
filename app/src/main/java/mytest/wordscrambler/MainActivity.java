@@ -63,4 +63,8 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(getApplicationContext(), "Text Cleared", Toast.LENGTH_SHORT);
         toast.show();
     }
+
+    public void sendMessage(View view) {
+
+    }
 }
