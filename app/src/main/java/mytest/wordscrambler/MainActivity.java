@@ -3,8 +3,11 @@ package mytest.wordscrambler;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -65,6 +68,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendMessage(View view) {
+        LayoutInflater li = LayoutInflater.from(MainActivity.this);
+        View promptView = li.inflate(R.layout.ph_num_prompt, null);
 
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText phoneNum = (EditText) promptView.findViewById(R.id.editTextDialogUserInput);
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String number = phoneNum.getText().toString();
+                        number = number.replaceAll("\\D+", "");
+
+                        if(number.length() != 11){
+                            Toast toast = Toast.makeText(getApplicationContext(), "Phone number too short/too long", Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else {
+
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
