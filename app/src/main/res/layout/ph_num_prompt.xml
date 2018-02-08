@@ -9,18 +9,22 @@
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="26dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/phone_num"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintBottom_toTopOf="@+id/toPhoneNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextDialogUserInput"
+        android:id="@+id/toPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:hint="@string/phone_num_hint"
+        android:inputType="phone"
         app:layout_constraintTop_toBottomOf="@+id/textView1">
 
         <requestFocus />

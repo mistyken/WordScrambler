@@ -6,5 +6,7 @@
     <string name="button_clear">Clear</string>
     <string name="top_message">Scramble a message by randomizing the letters btw first and last. HAVE FUN!</string>
     <string name="button_send">Send</string>
-    <string name="phone_num">Enter a phone number (x-xxx-xxx-xxxx)</string>
+    <string name="phone_num">Enter a phone number</string>
+    <string name="test_end_point">https://dry-escarpment-29044.herokuapp.com/</string>
+    <string name="phone_num_hint">(x-xxx-xxx-xxxx)</string>
 </resources>

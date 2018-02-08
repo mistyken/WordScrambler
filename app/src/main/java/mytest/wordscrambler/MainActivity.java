@@ -7,29 +7,43 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telecom.CallScreeningService;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import java.io.IOException;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
+    private EditText textMessage;
+    private EditText phoneNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        textMessage = (EditText) findViewById(R.id.textMessage);
     }
 
     public void scrambleMessage(View view){
-        EditText editText = (EditText) findViewById(R.id.textMessage);
-        String textMessage = editText.getText().toString();
+        String holder = textMessage.getText().toString();
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         
-        if(textMessage != null && textMessage.length() > 0){
-            String[] phrase = textMessage.split(" ");
+        if(holder != null && holder.length() > 0){
+            String[] phrase = holder.split(" ");
             for(String word: phrase){
                 char[] wordChar = word.toCharArray();
                 for(int i = 1; i < wordChar.length - 2; i++){
@@ -42,18 +56,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        textMessage = sb.toString().toLowerCase();
+        holder = sb.toString().toLowerCase();
         
-        editText.setText(textMessage);
+        textMessage.setText(holder);
         Toast toast = Toast.makeText(getApplicationContext(), "Text Scrambled", Toast.LENGTH_SHORT);
         toast.show();
     }
 
     public void copyMessage(View view){
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        EditText editText = (EditText) findViewById(R.id.textMessage);
-        String textMessage = editText.getText().toString();
-        ClipData clip = ClipData.newPlainText("textMessage", textMessage);
+        String holder = textMessage.getText().toString();
+        ClipData clip = ClipData.newPlainText("textMessage", holder);
         clipboard.setPrimaryClip(clip);
 
         Toast toast = Toast.makeText(getApplicationContext(), "Text Copied", Toast.LENGTH_SHORT);
@@ -61,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clearMessage(View view){
-        EditText editText = (EditText) findViewById(R.id.textMessage);
-        editText.setText("");
+        textMessage.setText("");
         Toast toast = Toast.makeText(getApplicationContext(), "Text Cleared", Toast.LENGTH_SHORT);
         toast.show();
     }
@@ -74,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText phoneNum = (EditText) promptView.findViewById(R.id.editTextDialogUserInput);
+        phoneNum = (EditText) promptView.findViewById(R.id.toPhoneNumber);
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -87,7 +99,42 @@ public class MainActivity extends AppCompatActivity {
                             Toast toast = Toast.makeText(getApplicationContext(), "Phone number too short/too long", Toast.LENGTH_SHORT);
                             toast.show();
                         } else {
+                            try {
+                                post(getApplicationContext().getString(R.string.test_end_point).concat("/sms"), new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        e.printStackTrace();
+                                    }
 
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        if(response.isSuccessful()) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast toast = Toast.makeText(getApplicationContext(), "Message had been sent to " + phoneNum.getText().toString(), Toast.LENGTH_SHORT);
+                                                    toast.show();
+                                                    phoneNum.setText("");
+                                                }
+                                            });
+                                        } else {
+                                            final int errorCode = response.code();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast toast = Toast.makeText(getApplicationContext(), "UNSUCCESSFUL! Message was NOT sent to "
+                                                            + phoneNum.getText().toString()
+                                                            + " Error Code:" + errorCode, Toast.LENGTH_SHORT);
+                                                    toast.show();
+                                                    phoneNum.setText("");
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 })
@@ -100,5 +147,21 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    Call post(String url, Callback callback) throws IOException {
+        OkHttpClient mClient = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("To", phoneNum.getText().toString())
+                .add("Body", textMessage.getText().toString())
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+        Call response = mClient.newCall(request);
+        response.enqueue(callback);
+        return response;
     }
 }
